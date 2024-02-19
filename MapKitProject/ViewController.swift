@@ -42,13 +42,14 @@ class ViewController: UIViewController, MKMapViewDelegate {
         let identifier = "Capital"
 
         // 3 Try to dequeue an annotation view from the map view's pool of unused views.
-        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView ?? nil
 
         
         if annotationView == nil {
             //4 If it isn't able to find a reusable view, create a new one using MKPinAnnotationView and sets its canShowCallout property to true. This triggers the popup with the city name.
             annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             annotationView?.canShowCallout = true
+            annotationView?.pinTintColor = .black
 
             // 5 Create a new UIButton using the built-in .detailDisclosure type.
             let btn = UIButton(type: .detailDisclosure)

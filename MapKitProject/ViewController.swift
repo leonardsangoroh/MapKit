@@ -12,6 +12,8 @@ class ViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet var mapView: MKMapView!
     
+    let mapTypes = ["hybrid": MKMapType.hybrid, "hybridFlyover": MKMapType.hybridFlyover, "mutedStandard": MKMapType.mutedStandard, "satellite": MKMapType.satellite, "satelliteFlyover": MKMapType.satelliteFlyover, "standard": MKMapType.standard]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -30,9 +32,34 @@ class ViewController: UIViewController, MKMapViewDelegate {
         mapView.addAnnotation(rome)
         mapView.addAnnotation(washington)
         //mapView.addAnnotations([london, oslo, paris, rome, washington])
+        
+        // right bar button item (for selecting map type)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Map Type", style: .plain, target: self, action: #selector(setMapType))
 
     }
     
+    @objc func setMapType(){
+        let ac = UIAlertController(title: "Choose Map Type", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+        
+        let submitMapType = UIAlertAction(title: "Submit", style: .default) { [weak self, weak ac] _ in
+            guard let mapType = ac?.textFields?[0].text else {return}
+            
+            self?.submit(mapType)
+        }
+        
+        ac.addAction(submitMapType)
+        present(ac, animated: true)
+    }
+    
+    func submit(_ mapTypee: String) {
+        
+        for mapType in mapTypes {
+            if mapType.key == mapTypee {
+                mapView.mapType = mapType.value
+            }
+        }
+    }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         // 1 If the annotation isn't from a capital city, it must return nil so iOS uses a default view.

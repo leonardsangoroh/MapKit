@@ -57,6 +57,8 @@ class ViewController: UIViewController, MKMapViewDelegate {
         for mapType in mapTypes {
             if mapType.key == mapTypee {
                 mapView.mapType = mapType.value
+            } else {
+                mapView.mapType = MKMapType.mutedStandard
             }
         }
     }
@@ -91,12 +93,12 @@ class ViewController: UIViewController, MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         guard let capital = view.annotation as? Capital else { return }
-        let placeName = capital.title
-        let placeInfo = capital.info
-
-        let ac = UIAlertController(title: placeName, message: placeInfo, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
-        present(ac, animated: true)
+        
+        let vc = WebViewController()
+        vc.placeName = capital.title
+        vc.placeInfo = capital.info
+        navigationController?.pushViewController(vc, animated: true)
+        
     }
 
 
